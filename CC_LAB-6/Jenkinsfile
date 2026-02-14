@@ -19,18 +19,18 @@ pipeline {
         }
 
         stage('Deploy NGINX') {
-    steps {
-        sh '''
-        docker rm -f nginx-lb || true
-        docker run -d \
-        --name nginx-lb \
-        -p 80:80 \
-        -v $(pwd)/CC_LAB-6/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro \
-        nginx
-        '''
-    }
-}
-
+            steps {
+                sh '''
+                docker rm -f nginx-lb || true
+                docker run -d \
+                --name nginx-lb \
+                -p 80:80 \
+                -v $(pwd)/CC_LAB-6/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro \
+                nginx
+                '''
+            }
+        }
+    }   // ✅ THIS WAS MISSING
 
     post {
         failure {
