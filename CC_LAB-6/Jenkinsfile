@@ -32,7 +32,7 @@ pipeline {
                 -p 80:80 \
                 -v $(pwd)/CC_LAB-6/nginx/nginx.conf:/etc/nginx/nginx.conf:ro \
                 nginx
-
+                '''
             }
         }
     }
