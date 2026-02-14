@@ -23,20 +23,17 @@ pipeline {
         }
 
         stage('Deploy NGINX Load Balancer') {
-            steps {
-                sh '''
-                docker rm -f nginx-lb || true
-
-                docker run -d \
-                --name nginx-lb \
-                -p 80:80 \
-                -v $(pwd)/CC_LAB-6/nginx:/etc/nginx/conf.d:ro \
-                nginx
-                '''
-            }
-        }
+    steps {
+        sh '''
+        docker rm -f nginx-lb || true
+        docker run -d \
+          --name nginx-lb \
+          -p 80:80 \
+          -v $(pwd)/CC_LAB-6/nginx/default.conf:/etc/nginx/nginx.conf:ro \
+          nginx
+        '''
     }
-
+}
     post {
         success {
             echo 'Pipeline executed successfully. NGINX load balancer is running.'
