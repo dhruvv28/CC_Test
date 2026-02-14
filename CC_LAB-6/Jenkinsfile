@@ -1,20 +1,21 @@
 pipeline {
     agent any
     stages {
+        stage('Build Backend Image') {
+            steps {
+                sh '''
+                docker rmi -f backend-app || true
+                docker build -t backend-app CC_LAB-6/backend
+                '''
+            }
+        }
         stage('Deploy Backend Containers') {
             steps {
                 sh '''
                 docker network create app-network || true
                 docker rm -f backend1 backend2 || true
-                
-                # Use nginx as backend with custom index pages
-                docker run -d --name backend1 --network app-network \
-                  -e HOSTNAME=backend1 \
-                  nginx:alpine sh -c 'echo "Served by backend: $(hostname)" > /usr/share/nginx/html/index.html && nginx -g "daemon off;"'
-                  
-                docker run -d --name backend2 --network app-network \
-                  -e HOSTNAME=backend2 \
-                  nginx:alpine sh -c 'echo "Served by backend: $(hostname)" > /usr/share/nginx/html/index.html && nginx -g "daemon off;"'
+                docker run -d --name backend1 --network app-network backend-app
+                docker run -d --name backend2 --network app-network backend-app
                 '''
             }
         }
